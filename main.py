@@ -241,7 +241,7 @@ with st.form(key='modele LGBM'):
         else:
             st.success('**ACCORD DE PRÊT**')
 
-        st.image('images/features_importance.jpg')
+        st.image('images/Features_importance.jpg')
 
 
 
