@@ -7,7 +7,6 @@ from sklearn.utils import parallel_backend
 import numpy as np
 import matplotlib.pyplot as plt
 from lime import lime_tabular
-import shap
 import streamlit.components.v1 as components
 import time
 import requests
