@@ -32,7 +32,7 @@ from urllib.request import urlopen
 
 
 def main():
-    API_URI = 'http://127.0.0.1:5000/api/client/'
+    API_URI = 'https://credit-api-oc7.herokuapp.com/api/client/'
 # Création des containers
 
 header = st.container()
