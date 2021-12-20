@@ -29,7 +29,7 @@ import plotly.graph_objects as go
 
 
 # Use the full page instead of a narrow central column
-st.set_page_config(layout="wide")
+#st.set_page_config(layout="wide")
 
 
 
@@ -97,8 +97,8 @@ def resultat():
                'threshold': {'line': {'color': "orange", 'width': 4}, 'thickness': 0.75, 'value':discriminant*100 }}))
 
     indicateur.update_layout(
-        width=200,
-        height=200,
+        width=270,
+        height=270,
         margin=dict(
             l=0,
             r=0,
@@ -110,8 +110,6 @@ def resultat():
     st.sidebar.write(indicateur)
 
 
-
-
 #####################-------ANALYSE DONNEES------###############################
 
 # Le container dataset
@@ -121,7 +119,7 @@ with parallel_backend('threading', n_jobs=-1):
 
 
         if 'number_of_rows' not in st.session_state or 'type' not in st.session_state:
-            st.session_state['number_of_rows'] = 5
+            st.session_state['number_of_rows'] = 2
             st.session_state['type'] = 'Categorical'
 
 
@@ -175,11 +173,12 @@ with parallel_backend('threading', n_jobs=-1):
         if "id" not in st.session_state:
             st.session_state[id] = None
             st.sidebar.write('--------------------')
-            id = st.sidebar.selectbox('ID',first_data['SK_ID_CURR'], key='client')
+            id = st.sidebar.selectbox('CLIENT ID',first_data['SK_ID_CURR'], key='client')
 
             #################---RESULTAT---###############################
 
             resultat()
+       
 
             #####################-------TABLEAU------###############################
             st.sidebar.markdown('**TABLEAU DU CLIENT**')
@@ -218,11 +217,11 @@ with parallel_backend('threading', n_jobs=-1):
 
                 fig1 = px.bar(first_data[:slider1],
                               y=features1,
-                              width=1100,
+                              width=850,
                               color_discrete_sequence= px.colors.qualitative.G10)
                 st.write(fig1)
 
-                fig12 = px.line(df.loc[:, features1], width=1100,
+                fig12 = px.line(df.loc[:, features1], width=850,
                               color_discrete_sequence=px.colors.qualitative.G10)
 
                 st.write(fig12)
@@ -248,7 +247,7 @@ with parallel_backend('threading', n_jobs=-1):
     df1 = first_data[features_dbl_1]
 
 
-    sns.scatterplot( x=df1.iloc[:,0], y=df1.iloc[:,1], hue=first_data[category_2] )
+    sns.scatterplot( x=df1.iloc[:,0], y=df1.iloc[:,1], hue=first_data[category_2],)
     did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
 
     plt.scatter(did.iloc[0, 0], did.iloc[0, 1],marker='x', c= 'black', s=70, )
@@ -311,7 +310,7 @@ with parallel_backend('threading', n_jobs=-1):
 
 
 
-##############--------EXPLICATIONS--------#####################
+##############--------EXPLICATIONS-GLOBALE-------#####################
 
 with st.form(key='modele LGBM'):
     if st.form_submit_button(label='EXPLICATIONS de la DECISION'):
@@ -320,21 +319,9 @@ with st.form(key='modele LGBM'):
 
 
 
-        #with parallel_backend('threading', n_jobs=6):
-        #    y_pred_proba_1 = y_pred_proba[:50, 1]  # on ne garde les probabilités que pour les positifs (minoritaires)
-        #    fpr, tpr, thresholds = roc_curve(y_test[:50], y_pred_proba_1)
 
-            # Calcul du threshold seuil discriminant
-        #    J = tpr - fpr
-         #   ix = argmax(J)  # On va chercher la plus grande diff entre tpr et fpr pour avoir la valeur seuil
-        #    best_thresh = thresholds[ix]
-        #    st.write(f'Meilleur seuil discriminant {best_thresh}')
 
-        # INTERPRETATION DU MODELE PAR LIME
-
-        #pickle_in = open('modele/lgbm.pkl', 'rb')
-        #lgbm = pickle.load(pickle_in)
-
+        #####################--_EXPLICATIONS-LOCALE---#################################
         lgbm = load_models()
 
         data_client = load_data('data/mini_data_test.csv')
@@ -372,7 +359,7 @@ with st.form(key='modele LGBM'):
         #html_fig = exp.as_html( predict_proba=True, show_predicted_value=True,)
 
         # exp.show_in_notebook(show_table=True, )
-        st.write(local_importance, )
+        st.sidebar.write(local_importance, )
 
 
        # html = explanation.as_html()
