@@ -329,60 +329,61 @@ with my_expander:
 
 
 #########################"--------EXPLICATIONS-GLOBALE-------############################
+my_expander = st.expander(label='Interprétation', expanded=True)
+with my_expander:
+    with st.form(key='modele LGBM'):
+        if st.form_submit_button(label='Interprétation globale et locale'):
 
-with st.form(key='modele LGBM'):
-    if st.form_submit_button(label='Interprétation globale et locale'):
-
-        st.image('images/Features_importance.jpg')
-
-
-
-
-
-        ################################--_EXPLICATIONS-LOCALE---#################################
-        lgbm = load_models()
-
-        data_client = load_data('data/mini_data_test.csv')
-
-
-        #st.dataframe(data_client.head(st.session_state['number_of_rows']))
-
-        list_xtest = data_client.columns.tolist() # Création d'une liste récupérant les features
-        #st.write(list_xtest)
-        list_xtest_without_id = [e for e in list_xtest if e not in 'SK_ID_CURR'] #Modification de la liste sans SK_ID_CURR pour lancer la future prédiction
-        #st.write(list_xtest_without_id)
-
-        # Nouvelle donnée à interpréter
-        X_try = data_client.iloc[:, :130].to_numpy()
-        ix = data_client.index[data_client['SK_ID_CURR'] == id].tolist()[0]
-        idx = X_try[ix, 0:130]
-
-        #
-        data_client_model = data_client.loc[:, list_xtest_without_id]
-
-        explainer = lime_tabular.LimeTabularExplainer(training_data=np.array(data_client.iloc[:50, :130]),
-                                                      mode="classification",
-                                                      feature_names=data_client_model.columns,
-                                                      )
-
-        explanation = explainer.explain_instance(idx, lgbm.predict_proba,)
+            st.image('images/Features_importance.jpg')
 
 
 
-        local_importance = explanation.as_pyplot_figure()
-        #html_fig = exp.as_html( predict_proba=True, show_predicted_value=True,)
-
-        # exp.show_in_notebook(show_table=True, )
-        st.write(local_importance, )
 
 
-       # html = explanation.as_html()
+            ################################--_EXPLICATIONS-LOCALE---#################################
+            lgbm = load_models()
 
-        #st.markdown(components.html(html, width=400, height=800))
+            data_client = load_data('data/mini_data_test.csv')
 
-        #shap_values = shap.TreeExplainer(lgbm).shap_values(data_client_model)
-        #shapy = shap.summary_plot(shap_values, data_client_model, max_display=10)
-        #st.write(shapy)
+
+            #st.dataframe(data_client.head(st.session_state['number_of_rows']))
+
+            list_xtest = data_client.columns.tolist() # Création d'une liste récupérant les features
+            #st.write(list_xtest)
+            list_xtest_without_id = [e for e in list_xtest if e not in 'SK_ID_CURR'] #Modification de la liste sans SK_ID_CURR pour lancer la future prédiction
+            #st.write(list_xtest_without_id)
+
+            # Nouvelle donnée à interpréter
+            X_try = data_client.iloc[:, :130].to_numpy()
+            ix = data_client.index[data_client['SK_ID_CURR'] == id].tolist()[0]
+            idx = X_try[ix, 0:130]
+
+            #
+            data_client_model = data_client.loc[:, list_xtest_without_id]
+
+            explainer = lime_tabular.LimeTabularExplainer(training_data=np.array(data_client.iloc[:50, :130]),
+                                                          mode="classification",
+                                                          feature_names=data_client_model.columns,
+                                                          )
+
+            explanation = explainer.explain_instance(idx, lgbm.predict_proba,)
+
+
+
+            local_importance = explanation.as_pyplot_figure()
+            #html_fig = exp.as_html( predict_proba=True, show_predicted_value=True,)
+
+            # exp.show_in_notebook(show_table=True, )
+            st.write(local_importance, )
+
+
+           # html = explanation.as_html()
+
+            #st.markdown(components.html(html, width=400, height=800))
+
+            #shap_values = shap.TreeExplainer(lgbm).shap_values(data_client_model)
+            #shapy = shap.summary_plot(shap_values, data_client_model, max_display=10)
+            #st.write(shapy)
 
 ######################################################################
 
