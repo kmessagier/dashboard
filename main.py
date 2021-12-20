@@ -162,7 +162,7 @@ with parallel_backend('threading', n_jobs=-1):
         if st.session_state['type'] ==  'Categorical':
             dist = pd.DataFrame(first_data[column].value_counts()).head(15)
             fig0 = px.bar(dist, width=850, height=400,)
-                        
+
             st.write(fig0)
 
         else:
@@ -244,7 +244,7 @@ with parallel_backend('threading', n_jobs=-1):
     features_dbl_1 = st.sidebar.multiselect("GRAPHIQUE 2 - Choisir 2 colonnes: ",
                                             first_data.columns,default= ['AMT_CREDIT','AMT_INCOME_TOTAL'])
 
-    category_2 = st.radio('',types['Categorical'])
+    category_2 = st.radio('',types['Categorical'],7)
 
 
     fig2 = plt.figure(figsize=(10, 4))
@@ -300,7 +300,7 @@ with parallel_backend('threading', n_jobs=-1):
     features4 = st.sidebar.multiselect("une variable numérique: ", types['Numerical'],  default=['AMT_INCOME_TOTAL'])
 
     category = st.radio('une variable catégorielle',
-                        types['Categorical'])
+                        types['Categorical'],6)
 
     fig5 = px.box(first_data, x= features4, y=category,
                   color = category,
