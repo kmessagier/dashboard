@@ -166,6 +166,7 @@ with parallel_backend('threading', n_jobs=-1):
         else:
             st.table(first_data[column].describe())
 
+
         #####################-------IDENTIFIANT-sidebar------###############################
 
         if "id" not in st.session_state:
