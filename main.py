@@ -211,7 +211,7 @@ with parallel_backend('threading', n_jobs=-1):
             st.write("You selected", len(features1), 'variables')
 
 
-            slider1 = st.slider('nombre de clients', min_value=1, max_value=50, value=5)
+            slider1 = st.slider('nombre de clients', min_value=1, max_value=50, value=25)
 
             if slider1:
 
@@ -281,8 +281,7 @@ with parallel_backend('threading', n_jobs=-1):
 
     with col2:
         st.table(val)
-        st.write(val)
-
+     
     with col3:
         st.write(fig4)
 
