@@ -47,7 +47,7 @@ model_training = st.container()
 with header:
 
     st.title('APPLICATION de CREDIT SCORING')
-    st.subheader('**ANALYSE GLOBALE**')
+
 
 
 # Fonction permettant de charger les données
@@ -112,136 +112,143 @@ def resultat():
 
 
 #####################-------ANALYSE DONNEES------###############################
-
-# Le container dataset
-with parallel_backend('threading', n_jobs=-1):
-    with dataset:
-        # chargement des données (data_test_poly) dans le cache
-
-
-        if 'number_of_rows' not in st.session_state or 'type' not in st.session_state:
-            st.session_state['number_of_rows'] = 2
-            st.session_state['type'] = 'Categorical'
-
-
-        first_data = load_data("data/data_test_50.csv")
-        first_data['SK_ID_CURR'] = first_data['SK_ID_CURR'].astype('int')
-
-
-        increment = st.button('Ajouter des lignes')
-        if increment:
-            st.session_state.number_of_rows += 1
-
-        decrement = st.button('Supprimer des lignes')
-        if decrement:
-            st.session_state.number_of_rows -= 1
-
-        st.dataframe(first_data.head(st.session_state['number_of_rows']))
+my_expander_A = st.expander(label= 'Analyse globale')
+with my_expander_A:
 
 
 
-    ##########################-----DESCRIBE et graphe-----#####################
-
-        types = {'Numerical':
-                     first_data.select_dtypes(include=np.number).columns.tolist(),
-                 'Categorical' :
-                     first_data.select_dtypes(exclude=np.number).columns.tolist()}
-
-        column = st.selectbox('Choisir une colonne', types[st.session_state['type']])
-
-        def handle_click_without_button():
-            if st.session_state.kind_of_column:
-                st.session_state.type = st.session_state.kind_of_column
-
-        type_of_column = st.radio("Quel type d'analyse souhaitez-vous?",
-                                  ['Categorical', 'Numerical'],
-                                  on_change=handle_click_without_button,
-                                  key='kind_of_column')
+    # chargement des données (data_test_poly) dans le cache
 
 
-        if st.session_state['type'] ==  'Categorical':
-            dist = pd.DataFrame(first_data[column].value_counts()).head(15)
-            fig0 = px.bar(dist, width=850, height=400,)
-
-            st.write(fig0)
-
-        else:
-            st.table(first_data[column].describe())
+    if 'number_of_rows' not in st.session_state or 'type' not in st.session_state:
+        st.session_state['number_of_rows'] = 2
+        st.session_state['type'] = 'Categorical'
 
 
-        #####################-------IDENTIFIANT-sidebar------###############################
-
-        if "id" not in st.session_state:
-            st.session_state[id] = None
-            st.sidebar.write('--------------------')
-            id = st.sidebar.selectbox('CLIENT ID',first_data['SK_ID_CURR'], key='client')
-
-            #################---RESULTAT---###############################
-
-            resultat()
+    first_data = load_data("data/data_test_50.csv")
+    first_data['SK_ID_CURR'] = first_data['SK_ID_CURR'].astype('int')
 
 
-            #####################-------TABLEAU------###############################
-            st.subheader('ANALYSE CLIENT')
-            st.sidebar.markdown('**TABLEAU DU CLIENT**')
-            features2 = st.sidebar.multiselect("les variables:", first_data.columns,
-                                               default=['SK_ID_CURR', 'CODE_GENDER', 'DAYS_BIRTH_x',
-                                                        'NAME_FAMILY_STATUS', 'CNT_CHILDREN', 'CREDIT_TERM',
-                                                        'DAYS_ID_PUBLISH', 'DAYS_LAST_PHONE_CHANGE', 'AMT_INCOME_TOTAL',
-                                                        'AMT_CREDIT',
-                                                        'AMT_ANNUITY', 'DAYS_EMPLOYED'])
+    increment = st.button('Ajouter des lignes')
+    if increment:
+        st.session_state.number_of_rows += 1
 
-            st.sidebar.write('--------------------')
+    decrement = st.button('Supprimer des lignes')
+    if decrement:
+        st.session_state.number_of_rows -= 1
 
-            st.markdown('**TABLEAU - Données importantes du client**')
-            st.write("Vous avez sélectionné", len(features2), 'variables')
-
-            data_id = first_data.loc[first_data['SK_ID_CURR'] == id, features2]
-            data_id2 = data_id.astype('str')
-            st.table(data_id2.T)
-
-
-        #################---GRAPHIQUES---##############################################
-
-        ###################----Graphique-1----##################
-        st.sidebar.markdown('**GRAPHIQUE 1**')
-        with graphes:
-
-            st.markdown('**GRAPHIQUE 1**')
-
-            features1 = st.sidebar.multiselect("Une ou plusieurs colonnes: ", types['Numerical'], default=['AMT_INCOME_TOTAL', 'AMT_GOODS_PRICE', 'AMT_CREDIT'])
-
-            st.write("You selected", len(features1), 'variables')
-
-
-            slider1 = st.slider('nombre de clients', min_value=1, max_value=50, value=25)
-
-            if slider1:
-
-                df = pd.DataFrame(first_data[:slider1], columns=features1)
-                separation = ',  '.join(features1)
-                fig1 = px.bar(first_data[:slider1],
-                              y=features1,
-                              width=850,
-                              title = f'Graphique en bâtons de {separation}',
-                              color_discrete_sequence= px.colors.qualitative.G10)
-
-                st.write(fig1)
-                separation = ',  '.join(features1)
-                fig12 = px.line(df.loc[:, features1], width=850,
-                                color_discrete_sequence=px.colors.qualitative.G10,
-                                title = f'Courbe de {separation}')
-
-                st.write(fig12)
-
-    ###################----Graphique-2----##################
+    st.dataframe(first_data.head(st.session_state['number_of_rows']))
 
 
 
-    st.markdown('**GRAPHIQUE 2**')
+##########################-----DESCRIBE et graphe-----#####################
 
-    st.sidebar.markdown('**GRAPHIQUE 2**')
-    features_dbl_1 = st.sidebar.multiselect("GRAPHIQUE 2 - Choisir 2 colonnes: ",
+    types = {'Numerical':
+                 first_data.select_dtypes(include=np.number).columns.tolist(),
+             'Categorical' :
+                 first_data.select_dtypes(exclude=np.number).columns.tolist()}
+
+    column = st.selectbox('Choisir une colonne', types[st.session_state['type']])
+
+    def handle_click_without_button():
+        if st.session_state.kind_of_column:
+            st.session_state.type = st.session_state.kind_of_column
+
+    type_of_column = st.radio("Quel type d'analyse souhaitez-vous?",
+                              ['Categorical', 'Numerical'],
+                              on_change=handle_click_without_button,
+                              key='kind_of_column')
+
+
+    if st.session_state['type'] ==  'Categorical':
+        dist = pd.DataFrame(first_data[column].value_counts()).head(15)
+        fig0 = px.bar(dist, width=850, height=400,)
+
+        st.write(fig0)
+
+    else:
+        st.table(first_data[column].describe())
+
+    clicked_A = st.button('ANALYSE GLOBALE')
+
+    #####################-------IDENTIFIANT-sidebar------###############################
+
+    if "id" not in st.session_state:
+        st.session_state[id] = None
+        st.sidebar.write('--------------------')
+        id = st.sidebar.selectbox('CLIENT ID',first_data['SK_ID_CURR'], key='client')
+
+        #################---RESULTAT---###############################
+
+        resultat()
+
+
+    #####################-------TABLEAU------###############################
+    st.subheader('ANALYSE CLIENT')
+
+my_expander0 = st.expander(label='Analyse client')
+with my_expander0:
+    st.sidebar.markdown('**TABLEAU DU CLIENT**')
+    features2 = st.sidebar.multiselect("les variables:", first_data.columns,
+                                       default=['SK_ID_CURR', 'CODE_GENDER', 'DAYS_BIRTH_x',
+                                                'NAME_FAMILY_STATUS', 'CNT_CHILDREN', 'CREDIT_TERM',
+                                                'DAYS_ID_PUBLISH', 'DAYS_LAST_PHONE_CHANGE', 'AMT_INCOME_TOTAL',
+                                                'AMT_CREDIT',
+                                                'AMT_ANNUITY', 'DAYS_EMPLOYED'])
+
+    st.sidebar.write('--------------------')
+
+    st.markdown('**TABLEAU - Données importantes du client**')
+    st.write("Vous avez sélectionné", len(features2), 'variables')
+
+    data_id = first_data.loc[first_data['SK_ID_CURR'] == id, features2]
+    data_id2 = data_id.astype('str')
+    st.table(data_id2.T)
+
+    clicked_0 = st.button('Tableau')
+    #################---GRAPHIQUES---##############################################
+
+###################----Graphique-1----##################
+my_expander1 = st.expander(label='Graphique 1')
+with my_expander1:
+    st.sidebar.markdown('**GRAPHIQUE 1**')
+
+    features1 = st.sidebar.multiselect("Une ou plusieurs colonnes: ", types['Numerical'], default=['AMT_INCOME_TOTAL', 'AMT_GOODS_PRICE', 'AMT_CREDIT'])
+
+    st.write("Vous avez sélectionné", len(features1), 'variables')
+
+
+    slider1 = st.slider('nombre de clients', min_value=1, max_value=50, value=25)
+
+    if slider1:
+
+        df = pd.DataFrame(first_data[:slider1], columns=features1)
+        separation = ',  '.join(features1)
+        fig1 = px.bar(first_data[:slider1],
+                      y=features1,
+                      width=850,
+                      title = f'Graphique en bâtons de {separation}',
+                      color_discrete_sequence= px.colors.qualitative.G10)
+
+        st.write(fig1)
+        separation = ',  '.join(features1)
+        fig12 = px.line(df.loc[:, features1], width=850,
+                        color_discrete_sequence=px.colors.qualitative.G10,
+                        title = f'Courbe de {separation}')
+
+        st.write(fig12)
+
+
+###################----Graphique-2----##################
+
+
+
+
+st.sidebar.markdown('**GRAPHIQUE 2**')
+
+my_expander = st.expander(label='Graphique 2')
+with my_expander:
+    features_dbl_1 = st.sidebar.multiselect("Choisir 2 variables ",
                                             first_data.columns,default= ['AMT_CREDIT','AMT_INCOME_TOTAL'])
 
     category_2 = st.radio('',types['Categorical'],7)
@@ -261,19 +268,22 @@ with parallel_backend('threading', n_jobs=-1):
     st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
     st.write(fig2)
     st.sidebar.write('--------------------')
-    ################GRAPHIQUE 3 et 4##########################
 
 
-    st.subheader('Boxplot des variables numériques')
-    st.sidebar.markdown('**GRAPHIQUE 3 et 4**')
+
+################GRAPHIQUE 3 et 4##########################
+
+my_expander = st.expander(label='Graphiques 3 et 4')
+with my_expander:
+
+    st.sidebar.markdown('**GRAPHIQUES 3 et 4**')
     features3 = st.sidebar.multiselect("Sélectionner les variables numériques: ", types['Numerical'], default=['AMT_INCOME_TOTAL', 'AMT_GOODS_PRICE', 'AMT_CREDIT'])
 
     st.write("Vous avez sélectionné", len(features3), 'variable(s)')
-
     st.sidebar.write('--------------------')
 
 
-    st.markdown('**GRAPHIQUE 3 et 4**')
+
     separation = ',  '.join(features3)
     fig3 = px.box(first_data, y=features3,notched=True,
                   title=f'Graphique à moustache de {separation}',
@@ -282,21 +292,22 @@ with parallel_backend('threading', n_jobs=-1):
 
     fig4 = px.bar(val, width=350, height=350)
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     with col1:
         st.write(fig3)
 
     with col2:
-        st.table(val)
-
-    with col3:
         st.write(fig4)
 
-    ###################----Graphique-5----##################
 
-    st.subheader('Boxplot numérique par variable catégorielle')
+###################----Graphique-5----##################
+
+my_expander = st.expander(label='Graphique 5')
+with my_expander:
+
+
     st.sidebar.markdown('**GRAPHIQUE 5**')
-    st.markdown('**GRAPHIQUE 5**')
+
     features4 = st.sidebar.multiselect("une variable numérique: ", types['Numerical'],  default=['AMT_INCOME_TOTAL'])
 
     category = st.radio('une variable catégorielle',
@@ -312,7 +323,7 @@ with parallel_backend('threading', n_jobs=-1):
                   title=f'Boîte à moustache de {features4[0]} éclatée sur la variable catégorielle {category}'
                   )
 
-    st.write(category)
+
     st.write(fig5)
 
 
@@ -320,7 +331,7 @@ with parallel_backend('threading', n_jobs=-1):
 #########################"--------EXPLICATIONS-GLOBALE-------############################
 
 with st.form(key='modele LGBM'):
-    if st.form_submit_button(label='EXPLICATIONS de la DECISION'):
+    if st.form_submit_button(label='Interprétation globale et locale'):
 
         st.image('images/Features_importance.jpg')
 
