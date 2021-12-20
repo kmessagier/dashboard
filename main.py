@@ -161,7 +161,8 @@ with parallel_backend('threading', n_jobs=-1):
 
         if st.session_state['type'] ==  'Categorical':
             dist = pd.DataFrame(first_data[column].value_counts()).head(15)
-            fig0 = px.bar(dist, width=850, height=400)
+            fig0 = px.bar(dist, width=850, height=400,)
+                        
             st.write(fig0)
 
         else:
@@ -200,7 +201,9 @@ with parallel_backend('threading', n_jobs=-1):
             st.table(data_id2.T)
 
 
-        #################---GRAPHIQUES---###############################
+        #################---GRAPHIQUES---##############################################
+
+        ###################----Graphique-1----##################
         st.sidebar.markdown('**GRAPHIQUE 1**')
         with graphes:
 
@@ -216,19 +219,22 @@ with parallel_backend('threading', n_jobs=-1):
             if slider1:
 
                 df = pd.DataFrame(first_data[:slider1], columns=features1)
-
+                separation = ',  '.join(features1)
                 fig1 = px.bar(first_data[:slider1],
                               y=features1,
                               width=850,
+                              title = f'Graphique en bâtons de {separation}',
                               color_discrete_sequence= px.colors.qualitative.G10)
-                st.write(fig1)
 
+                st.write(fig1)
+                separation = ',  '.join(features1)
                 fig12 = px.line(df.loc[:, features1], width=850,
-                              color_discrete_sequence=px.colors.qualitative.G10)
+                                color_discrete_sequence=px.colors.qualitative.G10,
+                                title = f'Courbe de {separation}')
 
                 st.write(fig12)
 
-    #######################################
+    ###################----Graphique-2----##################
 
 
 
@@ -241,9 +247,6 @@ with parallel_backend('threading', n_jobs=-1):
     category_2 = st.radio('',types['Categorical'])
 
 
-
-
-
     fig2 = plt.figure(figsize=(10, 4))
     plt.grid()
     df1 = first_data[features_dbl_1]
@@ -253,6 +256,8 @@ with parallel_backend('threading', n_jobs=-1):
     did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
 
     plt.scatter(did.iloc[0, 0], did.iloc[0, 1],marker='x', c= 'black', s=70, )
+
+    plt.title(f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
     st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
     st.write(fig2)
     st.sidebar.write('--------------------')
@@ -269,29 +274,31 @@ with parallel_backend('threading', n_jobs=-1):
 
 
     st.markdown('**GRAPHIQUE 3 et 4**')
-    fig3 = px.box(first_data, y=features3,notched=True)
+    separation = ',  '.join(features3)
+    fig3 = px.box(first_data, y=features3,notched=True,
+                  title=f'Graphique à moustache de {separation}',
+                  )
     val = first_data.loc[first_data['SK_ID_CURR'] == id, features3].T
 
     fig4 = px.bar(val, width=350, height=350)
 
     col1, col2, col3 = st.columns(3)
     with col1:
-
         st.write(fig3)
 
     with col2:
         st.table(val)
-     
+
     with col3:
         st.write(fig4)
 
+    ###################----Graphique-5----##################
 
     st.subheader('Boxplot numérique par variable catégorielle')
     st.sidebar.markdown('**GRAPHIQUE 5**')
     st.markdown('**GRAPHIQUE 5**')
     features4 = st.sidebar.multiselect("une variable numérique: ", types['Numerical'],  default=['AMT_INCOME_TOTAL'])
 
-    st.write("You selected", len(features4), 'features')
     category = st.radio('une variable catégorielle',
                         types['Categorical'])
 
@@ -301,7 +308,8 @@ with parallel_backend('threading', n_jobs=-1):
                   notched=False,  # used notched shape
                   width=850,
                   height=500,
-                  orientation='h'
+                  orientation='h',
+                  title=f'Boîte à moustache de {features4[0]} éclatée sur la variable catégorielle {category}'
                   )
 
     st.write(category)
@@ -309,9 +317,7 @@ with parallel_backend('threading', n_jobs=-1):
 
 
 
-
-
-##############--------EXPLICATIONS-GLOBALE-------#####################
+#########################"--------EXPLICATIONS-GLOBALE-------############################
 
 with st.form(key='modele LGBM'):
     if st.form_submit_button(label='EXPLICATIONS de la DECISION'):
@@ -322,7 +328,7 @@ with st.form(key='modele LGBM'):
 
 
 
-        #####################--_EXPLICATIONS-LOCALE---#################################
+        ################################--_EXPLICATIONS-LOCALE---#################################
         lgbm = load_models()
 
         data_client = load_data('data/mini_data_test.csv')
