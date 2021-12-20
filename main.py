@@ -316,7 +316,7 @@ with parallel_backend('threading', n_jobs=-1):
 with st.form(key='modele LGBM'):
     if st.form_submit_button(label='EXPLICATIONS de la DECISION'):
 
-        st.image('images/features_importance.jpg')
+        st.image('images/Features_importance.jpg')
 
 
 
