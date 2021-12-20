@@ -197,7 +197,7 @@ with parallel_backend('threading', n_jobs=-1):
 
             data_id = first_data.loc[first_data['SK_ID_CURR'] == id, features2]
             data_id2 = data_id.astype('str')
-            st.dataframe(data_id2.T)
+            st.table(data_id2.T)
 
 
         #################---GRAPHIQUES---###############################
