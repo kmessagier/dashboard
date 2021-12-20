@@ -88,9 +88,10 @@ def resultat():
         domain={'x': [0, 1], 'y': [0, 1]},
         value=score,
         mode="gauge+number+delta",
+        title={'text':'Score'},
         delta={'reference': discriminant*100, 'increasing': {'color': "RebeccaPurple"}},
         gauge={'axis': {'range': [None, 100]},
-               'bar': {'color': "red"},
+               'bar': {'color': "darkblue"},
                'steps': [
                    {'range': [0, 50], 'color': "lightgray"},
                    {'range': [50, 100], 'color': "gray"}],
@@ -191,7 +192,7 @@ with parallel_backend('threading', n_jobs=-1):
 
             st.sidebar.write('--------------------')
 
-            st.markdown('**Données importantes du client**')
+            st.markdown('**TABLEAU - Données importantes du client**')
             st.write("Vous avez sélectionné", len(features2), 'variables')
 
             data_id = first_data.loc[first_data['SK_ID_CURR'] == id, features2]
@@ -278,8 +279,8 @@ with parallel_backend('threading', n_jobs=-1):
 
         st.write(fig3)
 
-    #with col2:
-
+    with col2:
+        st.table(val)
         st.write(val)
 
     with col3:
@@ -327,10 +328,6 @@ with st.form(key='modele LGBM'):
 
         data_client = load_data('data/mini_data_test.csv')
 
-        progress = st.progress(0)
-        for i in range(100):
-            time.sleep(0.02)
-            progress.progress(i+1)
 
         #st.dataframe(data_client.head(st.session_state['number_of_rows']))
 
@@ -360,7 +357,7 @@ with st.form(key='modele LGBM'):
         #html_fig = exp.as_html( predict_proba=True, show_predicted_value=True,)
 
         # exp.show_in_notebook(show_table=True, )
-        st.sidebar.write(local_importance, )
+        st.write(local_importance, )
 
 
        # html = explanation.as_html()
