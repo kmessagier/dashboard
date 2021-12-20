@@ -160,10 +160,8 @@ with parallel_backend('threading', n_jobs=-1):
 
         if st.session_state['type'] ==  'Categorical':
             dist = pd.DataFrame(first_data[column].value_counts()).head(15)
-            st.bar_chart(dist, width=400, height=250)
-
-
-
+            fig0 = px.bar(dist, width=850, height=400)
+            st.write(fig0)
 
         else:
             st.table(first_data[column].describe())
@@ -178,9 +176,10 @@ with parallel_backend('threading', n_jobs=-1):
             #################---RESULTAT---###############################
 
             resultat()
-       
+
 
             #####################-------TABLEAU------###############################
+            st.subheader('ANALYSE CLIENT')
             st.sidebar.markdown('**TABLEAU DU CLIENT**')
             features2 = st.sidebar.multiselect("les variables:", first_data.columns,
                                                default=['SK_ID_CURR', 'CODE_GENDER', 'DAYS_BIRTH_x',
@@ -202,6 +201,7 @@ with parallel_backend('threading', n_jobs=-1):
         #################---GRAPHIQUES---###############################
         st.sidebar.markdown('**GRAPHIQUE 1**')
         with graphes:
+
             st.markdown('**GRAPHIQUE 1**')
 
             features1 = st.sidebar.multiselect("Une ou plusieurs colonnes: ", types['Numerical'], default=['AMT_INCOME_TOTAL', 'AMT_GOODS_PRICE', 'AMT_CREDIT'])
@@ -298,8 +298,8 @@ with parallel_backend('threading', n_jobs=-1):
                   color = category,
                   points="outliers",
                   notched=False,  # used notched shape
-                  width=800,
-                  height=800,
+                  width=850,
+                  height=500,
                   orientation='h'
                   )
 
