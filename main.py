@@ -358,8 +358,7 @@ with my_expander:
             X_try = data_client.iloc[:, :130].to_numpy()
             ix = data_client.index[data_client['SK_ID_CURR'] == id].tolist()[0]
             idx = X_try[ix, :]
-            st.write(ix)
-            st.write(idx)
+
 
             #
             data_client_model = data_client.loc[:, list_xtest_without_id]
