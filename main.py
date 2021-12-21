@@ -94,7 +94,7 @@ def resultat():
                'bar': {'color': "darkblue"},
                'steps': [
                    {'range': [0, 50], 'color': "lightgray"},
-                   {'range': [50, 100], 'color': "gray"}],
+                   {'range': [50, 100], 'color': "cyan"}],
                'threshold': {'line': {'color': "orange", 'width': 4}, 'thickness': 0.75, 'value':discriminant*100 }}))
 
     indicateur.update_layout(
@@ -329,6 +329,7 @@ with my_expander:
 
 
 #########################"--------EXPLICATIONS-GLOBALE-------############################
+#@st.cache(persist=True)
 my_expander = st.expander(label='Interprétation', expanded=True)
 with my_expander:
     with st.form(key='modele LGBM'):
@@ -356,13 +357,15 @@ with my_expander:
             # Nouvelle donnée à interpréter
             X_try = data_client.iloc[:, :130].to_numpy()
             ix = data_client.index[data_client['SK_ID_CURR'] == id].tolist()[0]
-            idx = X_try[ix, 0:130]
+            idx = X_try[ix, :]
+            st.write(ix)
+            st.write(idx)
 
             #
             data_client_model = data_client.loc[:, list_xtest_without_id]
 
-            explainer = lime_tabular.LimeTabularExplainer(training_data=np.array(data_client.iloc[:50, :130]),
-                                                          mode="classification",
+            explainer = lime_tabular.LimeTabularExplainer(training_data=np.array(data_client.iloc[:, :130]),
+
                                                           feature_names=data_client_model.columns,
                                                           )
 
@@ -371,19 +374,16 @@ with my_expander:
 
 
             local_importance = explanation.as_pyplot_figure()
-            #html_fig = exp.as_html( predict_proba=True, show_predicted_value=True,)
 
-            # exp.show_in_notebook(show_table=True, )
+
+
             st.write(local_importance, )
 
 
-           # html = explanation.as_html()
+            html = explanation.as_html()
 
-            #st.markdown(components.html(html, width=400, height=800))
+            st.markdown(components.html(html, width=400, height=800))
 
-            #shap_values = shap.TreeExplainer(lgbm).shap_values(data_client_model)
-            #shapy = shap.summary_plot(shap_values, data_client_model, max_display=10)
-            #st.write(shapy)
 
 ######################################################################
 
