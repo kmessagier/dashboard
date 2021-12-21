@@ -376,7 +376,7 @@ with my_expander:
 
 
 
-            st.write(local_importance, )
+            st.markdown(local_importance, )
 
 
             html = explanation.as_html()
