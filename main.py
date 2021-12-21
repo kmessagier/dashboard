@@ -290,14 +290,11 @@ with my_expander:
                   )
     val = first_data.loc[first_data['SK_ID_CURR'] == id, features3].T
 
-    fig4 = px.bar(val, width=350, height=350)
+    fig4 = px.bar(val, width=300, height=300)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write(fig3)
+    st.write(fig3)
 
-    with col2:
-        st.write(fig4)
+    st.write(fig4)
 
 
 ###################----Graphique-5----##################
@@ -376,13 +373,13 @@ with my_expander:
 
 
 
-            st.markdown(local_importance, )
+            st.write(local_importance, )
 
 
-            html = explanation.as_html()
+            #html = explanation.as_html()
 
 
-            st.write(components.html(html, width=400, height=800))
+            #st.markdown(components.html(html, width=800, height=800))
 
 
 ######################################################################
