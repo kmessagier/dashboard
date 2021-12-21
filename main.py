@@ -381,7 +381,7 @@ with my_expander:
 
             html = explanation.as_html()
 
-            st.markdown(components.html(html, width=400, height=800))
+            st.write(components.html(html, width=400, height=800))
 
 
 ######################################################################
