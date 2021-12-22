@@ -112,7 +112,7 @@ def resultat():
 
 
 #####################-------ANALYSE DONNEES------###############################
-my_expander_A = st.expander(label= 'Analyse globale', expanded=True)
+my_expander_A = st.expander(label= 'Analyse globale', expanded=False)
 with my_expander_A:
 
 
@@ -169,7 +169,7 @@ with my_expander_A:
     else:
         st.table(first_data[column].describe())
 
-    clicked_A = st.button('analyse globale')
+
 
     #####################-------IDENTIFIANT-sidebar------###############################
 
@@ -186,7 +186,7 @@ with my_expander_A:
     #####################-------TABLEAU------###############################
 
 
-my_expander0 = st.expander(label='Analyse client', expanded=True)
+my_expander0 = st.expander(label='Analyse client', expanded=False)
 with my_expander0:
     st.sidebar.markdown('**TABLEAU DU CLIENT**')
     features2 = st.sidebar.multiselect("les variables:", first_data.columns,
@@ -205,11 +205,11 @@ with my_expander0:
     data_id2 = data_id.astype('str')
     st.table(data_id2.T)
 
-    clicked_0 = st.button('Tableau')
+
     #################---GRAPHIQUES---##############################################
 
 ###################----Graphique-1----##################
-my_expander1 = st.expander(label='Graphique 1', expanded=True)
+my_expander1 = st.expander(label='Graphique 1', expanded=False)
 with my_expander1:
     st.sidebar.markdown('**GRAPHIQUE 1**')
 
@@ -246,7 +246,7 @@ with my_expander1:
 
 st.sidebar.markdown('**GRAPHIQUE 2**')
 
-my_expander = st.expander(label='Graphique 2', expanded=True)
+my_expander = st.expander(label='Graphique 2', expanded=False)
 with my_expander:
     features_dbl_1 = st.sidebar.multiselect("Choisir 2 variables ",
                                             first_data.columns,default= ['AMT_CREDIT','AMT_INCOME_TOTAL'])
@@ -273,7 +273,7 @@ with my_expander:
 
 ################GRAPHIQUE 3 et 4##########################
 
-my_expander = st.expander(label='Graphiques 3 et 4', expanded=True)
+my_expander = st.expander(label='Graphiques 3 et 4', expanded=False)
 with my_expander:
 
     st.sidebar.markdown('**GRAPHIQUES 3 et 4**')
@@ -299,7 +299,7 @@ with my_expander:
 
 ###################----Graphique-5----##################
 
-my_expander = st.expander(label='Graphique 5', expanded=True)
+my_expander = st.expander(label='Graphique 5', expanded=False)
 with my_expander:
 
 
@@ -327,10 +327,11 @@ with my_expander:
 
 #########################"--------EXPLICATIONS-GLOBALE-------############################
 #@st.cache(persist=True)
-my_expander = st.expander(label='Interprétation', expanded=True)
+my_expander = st.expander(label='Interprétation', expanded=False)
 with my_expander:
     with st.form(key='modele LGBM'):
         if st.form_submit_button(label='Interprétation globale et locale'):
+
 
             st.image('images/Features_importance.jpg')
 
