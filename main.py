@@ -76,7 +76,7 @@ def resultat():
     score = int(proba0*100)
     #json = data_json["json"]
 
-    discriminant = 0.476
+    discriminant = 0.485
     #st.write(proba0, width=1000, height=300)
     if proba0 < discriminant:
         st.sidebar.warning('**REFUS DE PRÊT**')
