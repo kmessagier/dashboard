@@ -246,7 +246,7 @@ with my_expander1:
 
 st.sidebar.markdown('**GRAPHIQUE 2**')
 
-my_expander = st.expander(label='Graphique 2', expanded=False)
+my_expander = st.expander(label='Graphique 2', )
 with my_expander:
     features_dbl_1 = st.sidebar.multiselect("Choisir 2 variables ",
                                             first_data.columns,default= ['AMT_CREDIT','AMT_INCOME_TOTAL'])
@@ -327,7 +327,7 @@ with my_expander:
 
 #########################"--------EXPLICATIONS-GLOBALE-------############################
 #@st.cache(persist=True)
-my_expander = st.expander(label='Interprétation', expanded=False)
+my_expander = st.expander(label='Interprétation',expanded=True)
 with my_expander:
     with st.form(key='modele LGBM'):
         if st.form_submit_button(label='Interprétation globale et locale'):
