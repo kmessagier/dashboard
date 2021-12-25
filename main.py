@@ -258,15 +258,18 @@ with my_expander:
     plt.grid()
     df1 = first_data[features_dbl_1]
 
+    try :
+        sns.scatterplot( x=df1.iloc[:,0], y=df1.iloc[:,1], hue=first_data[category_2],)
+        did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
+        plt.scatter(did.iloc[0, 0], did.iloc[0, 1],marker='x', c= 'black', s=70, )
+        plt.title(
+            f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
+        st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
+        st.write(fig2)
+    except:
+        st.error('ERREUR - Veuillez saisir 2 variables variable dans la sidebar GRAPHIQUE2')
 
-    sns.scatterplot( x=df1.iloc[:,0], y=df1.iloc[:,1], hue=first_data[category_2],)
-    did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
 
-    plt.scatter(did.iloc[0, 0], did.iloc[0, 1],marker='x', c= 'black', s=70, )
-
-    plt.title(f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
-    st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
-    st.write(fig2)
     st.sidebar.write('--------------------')
 
 
@@ -310,19 +313,22 @@ with my_expander:
     category = st.radio('une variable catégorielle',
                         types['Categorical'],6)
 
-    fig5 = px.box(first_data, x= features4, y=category,
-                  color = category,
-                  points="outliers",
-                  notched=False,  # used notched shape
-                  width=850,
-                  height=500,
-                  orientation='h',
-                  title=f'Boîte à moustache de {features4[0]} éclatée sur la variable catégorielle {category}'
-                  )
+    try:
+        fig5 = px.box(first_data, x= features4, y=category,
+                      color = category,
+                      points="outliers",
+                      notched=False,  # used notched shape
+                      width=850,
+                      height=500,
+                      orientation='h',
+                      title=f'Boîte à moustache de {features4[0]} éclatée sur la variable catégorielle {category}'
+                      )
 
 
-    st.write(fig5)
+        st.write(fig5)
 
+    except:
+        st.error('ERREUR - Veuillez saisir une seule variable dans la sidebar GRAPHIQUE 5')
 
 
 #########################"--------EXPLICATIONS-GLOBALE-------############################
