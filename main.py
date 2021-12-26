@@ -213,7 +213,7 @@ with my_expander1:
 
         st.write(fig1)
         separation = ',  '.join(features1)
-        fig12 = px.line(df.loc[:, features1], width=850,
+        fig12 = px.line(df.loc[:, features1], width=800,
                         color_discrete_sequence=px.colors.qualitative.G10,
                         title = f'Courbe de {separation}')
         fig12.update_layout(plot_bgcolor="white")
