@@ -258,7 +258,7 @@ with my_expander:
 
     df1 = first_data[features_dbl_1]
     df_slider2 = df1[:slider2]
-    st.write(df_slider2)
+
 
     try :
         fig2=px.scatter( x=df_slider2.iloc[:,0], y=df_slider2.iloc[:,1],
