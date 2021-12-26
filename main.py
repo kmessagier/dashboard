@@ -253,17 +253,33 @@ with my_expander:
 
     category_2 = st.radio('',types['Categorical'],7)
 
+    slider2 = st.slider('Nombre de clients',  min_value=1, max_value=50, value=50)
 
-    fig2 = plt.figure(figsize=(10, 4))
-    plt.grid()
+
     df1 = first_data[features_dbl_1]
+    df_slider2 = df1[:slider2]
+    st.write(df_slider2)
 
     try :
-        sns.scatterplot( x=df1.iloc[:,0], y=df1.iloc[:,1], hue=first_data[category_2],)
+        fig2=px.scatter( x=df_slider2.iloc[:,0], y=df_slider2.iloc[:,1],
+                         width=800,
+                         height=450,
+                         color=first_data.loc[:slider2-1,category_2],
+                         title=f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} distribué sur {category_2}',
+                         )
         did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
-        plt.scatter(did.iloc[0, 0], did.iloc[0, 1],marker='x', c= 'black', s=70, )
-        plt.title(
-            f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
+
+        fig2.add_trace(
+            go.Scatter(
+                x=[did.iloc[0, 0]],
+                y=[did.iloc[0, 1]],
+                mode="markers",
+                marker=dict(size=20, color="LightSeaGreen"),
+                showlegend=False)
+        )
+        #fig2.update_layout(px.scatter(did.iloc[0, 0], did.iloc[0, 1],symbol='x', color= 'black' )
+        #plt.title(
+        #    f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
         st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
         st.write(fig2)
     except IndexError:
