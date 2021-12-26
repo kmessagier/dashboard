@@ -293,7 +293,7 @@ with my_expander:
  #####################-------TABLEAU------###############################
 
 
-my_expander0 = st.expander(label='Analyse client',)
+my_expander0 = st.expander(label='Analyse client',expanded=True)
 with my_expander0:
     st.sidebar.markdown('**Données**')
     features2 = st.sidebar.multiselect("les variables:", first_data.columns,
