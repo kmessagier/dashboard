@@ -299,7 +299,7 @@ with my_expander0:
     features2 = st.sidebar.multiselect("les variables:", first_data.columns,
                                        default=['SK_ID_CURR', 'CODE_GENDER', 'DAYS_BIRTH_x',
                                                 'NAME_FAMILY_STATUS', 'CNT_CHILDREN', 'CREDIT_TERM',
-                                                'DAYS_ID_PUBLISH', 'DAYS_LAST_PHONE_CHANGE', 'AMT_INCOME_TOTAL',
+                                                'DAYS_ID_PUBLISH', 'AMT_INCOME_TOTAL',
                                                 'AMT_CREDIT',
                                                 'AMT_ANNUITY', 'DAYS_EMPLOYED'])
 
