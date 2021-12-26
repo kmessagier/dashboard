@@ -333,9 +333,10 @@ with my_expander:
                           width=800,
                           height=450,
                           color=first_data.loc[:slider2 - 1, category_2],
+                          opacity=1,
                           title=f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} distribué sur {category_2}',
                           )
-        fig5.update_layout(plot_bgcolor="white")
+        fig5.update_layout(plot_bgcolor="white",)
         did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
         fig5.update_xaxes(showgrid=True,linewidth=1, linecolor='gray', mirror=True, gridcolor="Lightgray")
         fig5.update_yaxes(showgrid=True,linewidth=1, linecolor='gray', mirror=True, gridcolor="Lightgray")
@@ -343,10 +344,18 @@ with my_expander:
             go.Scatter(
                 x=[did.iloc[0, 0]],
                 y=[did.iloc[0, 1]],
-                mode="markers",
-                marker=dict(size=20, color="LightSeaGreen"),
+                mode="markers+text",
+
+                marker=dict(symbol= "star", size=13,
+                            color="Lightskyblue",
+                            line_color="midnightblue",
+                            line_width=2),
+                textposition="middle right",
+                text = f"Client n° {id}",
                 showlegend=False)
         )
+
+
         # fig2.update_layout(px.scatter(did.iloc[0, 0], did.iloc[0, 1],symbol='x', color= 'black' )
         # plt.title(
         #    f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
