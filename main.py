@@ -266,8 +266,8 @@ with my_expander:
             f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
         st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
         st.write(fig2)
-    except:
-        st.error('ERREUR - Veuillez saisir 2 variables variable dans la sidebar GRAPHIQUE2')
+    except IndexError:
+        st.warning('ERREUR - Veuillez saisir 2 variables variable dans la sidebar GRAPHIQUE2')
 
 
     st.sidebar.write('--------------------')
@@ -327,8 +327,8 @@ with my_expander:
 
         st.write(fig5)
 
-    except:
-        st.error('ERREUR - Veuillez saisir une seule variable dans la sidebar GRAPHIQUE 5')
+    except IndexError:
+        st.warning('ERREUR - Veuillez saisir une  variable dans la sidebar GRAPHIQUE 5')
 
 
 #########################"--------EXPLICATIONS-GLOBALE-------############################
