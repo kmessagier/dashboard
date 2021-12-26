@@ -162,8 +162,8 @@ with my_expander_A:
 
     if st.session_state['type'] ==  'Categorical':
         dist = pd.DataFrame(first_data[column].value_counts()).head(15)
-        fig0 = px.bar(dist, width=850, height=400,)
-
+        fig0 = px.bar(dist, x=dist.index, y =column, width=850, height=400,)
+        fig0.update_layout(plot_bgcolor="white")
         st.write(fig0)
 
     else:
@@ -183,27 +183,6 @@ with my_expander_A:
         resultat()
 
 
-    #####################-------TABLEAU------###############################
-
-
-my_expander0 = st.expander(label='Analyse client', expanded=False)
-with my_expander0:
-    st.sidebar.markdown('**TABLEAU DU CLIENT**')
-    features2 = st.sidebar.multiselect("les variables:", first_data.columns,
-                                       default=['SK_ID_CURR', 'CODE_GENDER', 'DAYS_BIRTH_x',
-                                                'NAME_FAMILY_STATUS', 'CNT_CHILDREN', 'CREDIT_TERM',
-                                                'DAYS_ID_PUBLISH', 'DAYS_LAST_PHONE_CHANGE', 'AMT_INCOME_TOTAL',
-                                                'AMT_CREDIT',
-                                                'AMT_ANNUITY', 'DAYS_EMPLOYED'])
-
-    st.sidebar.write('--------------------')
-
-    st.markdown('**TABLEAU - Données importantes du client**')
-    st.write("Vous avez sélectionné", len(features2), 'variables')
-
-    data_id = first_data.loc[first_data['SK_ID_CURR'] == id, features2]
-    data_id2 = data_id.astype('str')
-    st.table(data_id2.T)
 
 
     #################---GRAPHIQUES---##############################################
@@ -226,69 +205,58 @@ with my_expander1:
         separation = ',  '.join(features1)
         fig1 = px.bar(first_data[:slider1],
                       y=features1,
-                      width=850,
+                      width=800,
                       title = f'Graphique en bâtons de {separation}',
                       color_discrete_sequence= px.colors.qualitative.G10)
+        fig1.update_layout(plot_bgcolor="white")
+
 
         st.write(fig1)
         separation = ',  '.join(features1)
         fig12 = px.line(df.loc[:, features1], width=850,
                         color_discrete_sequence=px.colors.qualitative.G10,
                         title = f'Courbe de {separation}')
+        fig12.update_layout(plot_bgcolor="white")
+        fig12.update_xaxes(showgrid=True,linewidth=1, linecolor='gray', mirror=True, gridcolor="Lightgray")
+        fig12.update_yaxes(showgrid=True,linewidth=1, linecolor='gray', mirror=True, gridcolor="Lightgray")
 
         st.write(fig12)
 
 
+
+
 ###################----Graphique-2----##################
 
-
-
-
-st.sidebar.markdown('**GRAPHIQUE 2**')
-
-my_expander = st.expander(label='Graphique 2', )
+my_expander = st.expander(label='Graphique 2',)
 with my_expander:
-    features_dbl_1 = st.sidebar.multiselect("Choisir 2 variables ",
-                                            first_data.columns,default= ['AMT_CREDIT','AMT_INCOME_TOTAL'])
-
-    category_2 = st.radio('',types['Categorical'],7)
-
-    slider2 = st.slider('Nombre de clients',  min_value=1, max_value=50, value=50)
 
 
-    df1 = first_data[features_dbl_1]
-    df_slider2 = df1[:slider2]
+    st.sidebar.markdown('**GRAPHIQUE 2**')
+
+    features4 = st.sidebar.multiselect("une variable numérique: ", types['Numerical'],  default=['AMT_INCOME_TOTAL'])
+
+    category = st.radio('une variable catégorielle',
+                        types['Categorical'],6)
+
+    try:
+        fig2 = px.box(first_data, x= features4, y=category,
+                      color = category,
+                      points="outliers",
+                      notched=False,  # used notched shape
+                      width=800,
+                      height=500,
+                      orientation='h',
+                      title=f'Boîte à moustache de {features4[0]} éclatée sur la variable catégorielle {category}'
+                      )
+        fig2.update_layout(plot_bgcolor="white")
+        fig2.update_xaxes(showgrid=False,linewidth=1, linecolor='gray', mirror=True, )
+        fig2.update_yaxes(showgrid=False,linewidth=1, linecolor='gray', mirror=True, )
 
 
-    try :
-        fig2=px.scatter( x=df_slider2.iloc[:,0], y=df_slider2.iloc[:,1],
-                         width=800,
-                         height=450,
-                         color=first_data.loc[:slider2-1,category_2],
-                         title=f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} distribué sur {category_2}',
-                         )
-        did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
-
-        fig2.add_trace(
-            go.Scatter(
-                x=[did.iloc[0, 0]],
-                y=[did.iloc[0, 1]],
-                mode="markers",
-                marker=dict(size=20, color="LightSeaGreen"),
-                showlegend=False)
-        )
-        #fig2.update_layout(px.scatter(did.iloc[0, 0], did.iloc[0, 1],symbol='x', color= 'black' )
-        #plt.title(
-        #    f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
-        st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
         st.write(fig2)
+
     except IndexError:
-        st.warning('ERREUR - Veuillez saisir 2 variables variable dans la sidebar GRAPHIQUE2')
-
-
-    st.sidebar.write('--------------------')
-
-
+        st.warning('ERREUR - Veuillez saisir une  variable dans la sidebar GRAPHIQUE 5')
 
 ################GRAPHIQUE 3 et 4##########################
 
@@ -307,45 +275,85 @@ with my_expander:
     fig3 = px.box(first_data, y=features3,notched=True,
                   title=f'Graphique à moustache de {separation}',
                   )
+    fig3.update_layout(plot_bgcolor="white")
+    fig3.update_xaxes(showgrid=False, linewidth=1, linecolor='gray', mirror=True, )
+    fig3.update_yaxes(showgrid=False, linewidth=1, linecolor='gray', mirror=True, )
     val = first_data.loc[first_data['SK_ID_CURR'] == id, features3].T
 
-    fig4 = px.bar(val, width=300, height=300)
-
+    fig4 = px.bar(val, width=400, height=300)
+    fig4.update_layout(plot_bgcolor="white")
+    fig4.update_xaxes(showgrid=False, linewidth=1, linecolor='gray', mirror=True, )
+    fig4.update_yaxes(showgrid=False, linewidth=1, linecolor='gray', mirror=True, )
     st.write(fig3)
 
     st.write(fig4)
 
+ #####################-------TABLEAU------###############################
+
+
+my_expander0 = st.expander(label='Analyse client',)
+with my_expander0:
+    st.sidebar.markdown('**Données**')
+    features2 = st.sidebar.multiselect("les variables:", first_data.columns,
+                                       default=['SK_ID_CURR', 'CODE_GENDER', 'DAYS_BIRTH_x',
+                                                'NAME_FAMILY_STATUS', 'CNT_CHILDREN', 'CREDIT_TERM',
+                                                'DAYS_ID_PUBLISH', 'DAYS_LAST_PHONE_CHANGE', 'AMT_INCOME_TOTAL',
+                                                'AMT_CREDIT',
+                                                'AMT_ANNUITY', 'DAYS_EMPLOYED'])
+
+    st.sidebar.write('--------------------')
+
+    st.markdown('**Données importantes du client**')
+    st.write("Vous avez sélectionné", len(features2), 'variables')
+
+    data_id = first_data.loc[first_data['SK_ID_CURR'] == id, features2]
+    data_id2 = data_id.astype('str')
+    st.table(data_id2.T)
 
 ###################----Graphique-5----##################
 
-my_expander = st.expander(label='Graphique 5', expanded=False)
+st.sidebar.markdown('**GRAPHIQUE 5**')
+
+my_expander = st.expander(label='Graphique 5', expanded=True)
 with my_expander:
+    features_dbl_1 = st.sidebar.multiselect("Choisir 2 variables ",
+                                            first_data.columns, default=['AMT_CREDIT', 'AMT_INCOME_TOTAL'])
 
+    category_2 = st.radio('', types['Categorical'], 7)
 
-    st.sidebar.markdown('**GRAPHIQUE 5**')
+    slider2 = st.slider('Nombre de clients', min_value=1, max_value=50, value=50)
 
-    features4 = st.sidebar.multiselect("une variable numérique: ", types['Numerical'],  default=['AMT_INCOME_TOTAL'])
-
-    category = st.radio('une variable catégorielle',
-                        types['Categorical'],6)
+    df1 = first_data[features_dbl_1]
+    df_slider2 = df1[:slider2]
 
     try:
-        fig5 = px.box(first_data, x= features4, y=category,
-                      color = category,
-                      points="outliers",
-                      notched=False,  # used notched shape
-                      width=850,
-                      height=500,
-                      orientation='h',
-                      title=f'Boîte à moustache de {features4[0]} éclatée sur la variable catégorielle {category}'
-                      )
-
-
+        fig5 = px.scatter(df_slider2, x=features_dbl_1[0], y=features_dbl_1[1],
+                          width=800,
+                          height=450,
+                          color=first_data.loc[:slider2 - 1, category_2],
+                          title=f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} distribué sur {category_2}',
+                          )
+        fig5.update_layout(plot_bgcolor="white")
+        did = first_data.loc[first_data['SK_ID_CURR'] == id, df1.columns,]
+        fig5.update_xaxes(showgrid=True,linewidth=1, linecolor='gray', mirror=True, gridcolor="Lightgray")
+        fig5.update_yaxes(showgrid=True,linewidth=1, linecolor='gray', mirror=True, gridcolor="Lightgray")
+        fig5.add_trace(
+            go.Scatter(
+                x=[did.iloc[0, 0]],
+                y=[did.iloc[0, 1]],
+                mode="markers",
+                marker=dict(size=20, color="LightSeaGreen"),
+                showlegend=False)
+        )
+        # fig2.update_layout(px.scatter(did.iloc[0, 0], did.iloc[0, 1],symbol='x', color= 'black' )
+        # plt.title(
+        #    f'Graphique de {first_data[features_dbl_1].columns[0]} en fonction de {first_data[features_dbl_1].columns[1]} éclaté sur {category_2}')
+        st.write(first_data.loc[first_data['SK_ID_CURR'] == id, [category_2]])
         st.write(fig5)
-
     except IndexError:
-        st.warning('ERREUR - Veuillez saisir une  variable dans la sidebar GRAPHIQUE 5')
+        st.warning('ERREUR - Veuillez saisir 2 variables variable dans la sidebar GRAPHIQUE2')
 
+    st.sidebar.write('--------------------')
 
 #########################"--------EXPLICATIONS-GLOBALE-------############################
 #@st.cache(persist=True)
