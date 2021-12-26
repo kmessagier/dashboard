@@ -162,7 +162,9 @@ with my_expander_A:
 
     if st.session_state['type'] ==  'Categorical':
         dist = pd.DataFrame(first_data[column].value_counts()).head(15)
-        fig0 = px.bar(dist, x=dist.index, y =column, width=850, height=400,)
+        fig0 = px.bar(dist, x=dist.index, y =column,
+                      width=700, height=400,
+                      title=f'Diagramme en barres de {column}')
         fig0.update_layout(plot_bgcolor="white")
         st.write(fig0)
 
