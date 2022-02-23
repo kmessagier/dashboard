@@ -112,7 +112,7 @@ def resultat():
 
 
 #####################-------ANALYSE DONNEES------###############################
-my_expander_A = st.expander(label= 'Analyse globale', expanded=False)
+my_expander_A = st.expander(label= 'Analyse globale', expanded=True)
 with my_expander_A:
 
 
@@ -190,7 +190,7 @@ with my_expander_A:
     #################---GRAPHIQUES---##############################################
 
 ###################----Graphique-1----##################
-my_expander1 = st.expander(label='Graphique 1', expanded=False)
+my_expander1 = st.expander(label='Graphique 1', expanded=True)
 with my_expander1:
     st.sidebar.markdown('**GRAPHIQUE 1**')
 
@@ -229,7 +229,7 @@ with my_expander1:
 
 ###################----Graphique-2----##################
 
-my_expander = st.expander(label='Graphique 2',)
+my_expander = st.expander(label='Graphique 2',expanded=True)
 with my_expander:
 
 
@@ -262,7 +262,7 @@ with my_expander:
 
 ################GRAPHIQUE 3 et 4##########################
 
-my_expander = st.expander(label='Graphiques 3 et 4', expanded=False)
+my_expander = st.expander(label='Graphiques 3 et 4', expanded=True)
 with my_expander:
 
     st.sidebar.markdown('**GRAPHIQUES 3 et 4**')
